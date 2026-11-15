@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="kk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Виет теоремасы — CASH FLOW</title>
+<style>
+:root{--cream:#fbf3e0;--pu:#8e5bc9;--pk:#f06fa4;--bl:#4db6e6;--ye:#f7c948;--gr:#62c370;--or:#ff9248;--ink:#4a2f6b;box-sizing:border-box;color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"Nunito","Segoe UI",Arial,sans-serif;display:flex;flex-direction:column;align-items:center;padding:8px}
+.board{position:relative;width:min(96vw,640px);aspect-ratio:1;display:grid;grid-template:repeat(7,1fr)/repeat(7,1fr);gap:1.4%;padding:2.2%;border-radius:26px;box-shadow:0 6px 0 #d9c6a0,0 0 0 4px #fff inset;background:repeating-linear-gradient(45deg,#c9a7ef 0 7px,#f7a8c8 7px 14px,#9fd8f2 14px 21px,#fbe08a 21px 28px,#a9dfae 28px 35px,#ffc08f 35px 42px)}
+.cell{border-radius:14%;border:2.5px dashed #fff9;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(9px,2.4vw,14px);font-weight:800;color:#fff;text-shadow:0 1px 1px #0004;box-shadow:inset 0 0 0 2px #fff3,0 2px 0 #0003;background-image:repeating-linear-gradient(90deg,#fff1 0 2px,transparent 2px 5px)}
+.cell i{font-style:normal;font-size:clamp(14px,4.2vw,26px);line-height:1}
+.cell small{position:absolute;opacity:.0}
+.T{background-color:var(--pu)}.P{background-color:var(--bl)}.B{background-color:#e9b320}.F{background-color:var(--pk)}
+.center{grid-area:2/2/7/7;background:var(--cream);border-radius:20px;border:3px dashed var(--or);box-shadow:inset 0 0 0 4px #fff,0 0 0 3px var(--pu);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5%;padding:2%;text-align:center}
+h1{margin:0;font-size:clamp(15px,4.6vw,28px);color:var(--pu);line-height:1.1;text-shadow:2px 2px 0 var(--ye)}
+.sc{font-weight:800;font-size:clamp(11px,3vw,17px)}
+.sc b{display:inline-block;background:var(--gr);color:#fff;border-radius:12px;padding:1px 9px;font-size:1.3em;border:2px dashed #fff}
+.scene{width:clamp(54px,15vw,86px);aspect-ratio:1;perspective:500px;margin:2px}
+.cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.2,.8,.3,1)}
+.f{position:absolute;inset:0;border-radius:14%;display:flex;align-items:center;justify-content:center;font-size:clamp(24px,7vw,42px);font-weight:900;color:#fff;border:3px dashed #fff;backface-visibility:hidden;background-image:repeating-linear-gradient(45deg,#fff2 0 3px,transparent 3px 7px)}
+.f1{background-color:var(--pu);transform:translateZ(var(--h))}.f2{background-color:var(--pk);transform:rotateY(90deg) translateZ(var(--h))}.f3{background-color:var(--bl);transform:rotateX(-90deg) translateZ(var(--h))}.f4{background-color:var(--gr);transform:rotateX(90deg) translateZ(var(--h))}.f5{background-color:var(--or);transform:rotateY(-90deg) translateZ(var(--h))}.f6{background-color:#e9b320;transform:rotateY(180deg) translateZ(var(--h))}
+.scene{--h:calc(clamp(54px,15vw,86px)/2)}
+button{font:inherit;font-weight:800;cursor:pointer;color:#fff;background:var(--pk);border:3px dashed #fff;border-radius:16px;padding:8px 16px;box-shadow:0 0 0 2px var(--pk),0 4px 0 #b0406f;font-size:clamp(12px,3.4vw,18px)}
+button:disabled{opacity:.5;cursor:default}
+button.ghost{background:var(--bl);box-shadow:0 0 0 2px var(--bl),0 4px 0 #2a7ea3}
+button.sm{padding:3px 10px;font-size:11px;background:var(--pu);box-shadow:0 0 0 2px var(--pu)}
+.pawn{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd2e6,#f06fa4 55%,#b83d7a);border:3px dashed #fff;box-shadow:0 4px 0 #0003;transition:left .35s,top .35s;z-index:5;display:flex;align-items:center;justify-content:center;gap:12%;pointer-events:none}
+.pawn:before,.pawn:after{content:"";width:14%;aspect-ratio:1;background:#4a2f6b;border-radius:50%;margin-top:-6%}
+.pawn span{position:absolute;top:-22%;width:30%;aspect-ratio:1;border-radius:50%;background:var(--ye);border:2px dashed #fff}
+#m{position:fixed;inset:0;background:#3c1e5a77;display:none;align-items:center;justify-content:center;padding:14px;z-index:10}
+.card{background:var(--cream);width:min(94vw,560px);max-height:88vh;overflow:auto;border-radius:22px;padding:18px;border:4px dashed var(--pu);box-shadow:0 0 0 5px #fff,0 8px 0 5px #0002}
+.tag{display:inline-block;color:#fff;border-radius:12px;padding:2px 12px;font-weight:800;font-size:14px;margin-bottom:8px}
+.q{font-size:clamp(17px,4.6vw,22px);font-weight:800;margin:6px 0 12px;line-height:1.35}
+.o{display:block;width:100%;margin:7px 0;text-align:left;background:#fff;color:var(--ink);border:3px dashed var(--bl);box-shadow:none;font-size:clamp(14px,4vw,18px)}
+.o.ok{background:var(--gr);color:#fff;border-color:#fff}.o.no{background:#ff7a7a;color:#fff;border-color:#fff}
+.ans{background:#fff;border:3px dashed var(--gr);border-radius:14px;padding:10px;font-size:clamp(16px,4.4vw,21px);font-weight:800;margin:10px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+</style></head><body>
+<div class="board" id="bd">
+ <div class="center">
+  <h1>Виет теоремасы<br>CASH FLOW</h1>
+  <div class="sc">Ортақ ұпай: <b id="sc">0</b></div>
+  <div class="sc">Орындалған тапсырма: <b id="dn" style="background:var(--or)">0</b></div>
+  <div class="scene"><div class="cube" id="cube"><div class="f f1">1</div><div class="f f2">2</div><div class="f f3">3</div><div class="f f4">4</div><div class="f f5">5</div><div class="f f6">6</div></div></div>
+  <button id="rb">🎲 Кубикті лақтыру</button>
+  <button class="sm" id="rs">Қайта бастау</button>
+ </div>
+ <div class="pawn" id="pw"><span></span></div>
+</div>
+<div id="m"><div class="card" id="cd"></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const LAY="TPBTFPTBPTFPTPBTFPTBPTFP";
+const INF={T:["Теориялық сұрақ","❓","var(--pu)","Теория"],P:["Есеп","✏️","var(--bl)","Есеп"],B:["Бонус","⭐","#e9b320","Бонус"],F:["Қызықты тапсырма","🧩","var(--pk)","Қызық"]};
+const TQ=[["x²+px+q=0 теңдеуінің түбірлерінің қосындысы неге тең?",["p","−p","q","−q"],1],
+["x²+px+q=0 теңдеуінің түбірлерінің көбейтіндісі неге тең?",["p","−p","q","−q"],2],
+["ax²+bx+c=0 теңдеуінің түбірлерінің қосындысы неге тең?",["b/a","−b/a","c/a","−c/a"],1],
+["ax²+bx+c=0 теңдеуінің түбірлерінің көбейтіндісі неге тең?",["c/a","−c/a","b/a","−b/a"],0],
+["x²−5x+6=0 теңдеуінің түбірлерінің қосындысы неге тең?",["5","−5","6","−6"],0],
+["x²+3x−10=0 теңдеуінің түбірлерінің көбейтіндісі неге тең?",["3","−3","10","−10"],3],
+["x²+2x−8=0 теңдеуінің түбірлерінің қосындысы неге тең?",["2","−2","8","−8"],1],
+["Теореманың авторы кім?",["Пифагор","Евклид","Виет","Ньютон"],2],
+["a+b+c=0 болса, ax²+bx+c=0 теңдеуінің бір түбірі неге тең?",["1","−1","0","2"],0],
+["x²−7x+12=0 теңдеуінің түбірлері қандай?",["3 және 4","−3 және −4","2 және 6","1 және 12"],0],
+["Түбірлері 2 және 5 болатын келтірілген квадрат теңдеу қайсы?",["x²−7x+10=0","x²+7x+10=0","x²−7x−10=0","x²−10x+7=0"],0]];
+const BQ=[["7·8 = ?","56"],["√81 = ?","9"],["15+27 = ?","42"],["12² = ?","144"],["Жартысы 35 болатын сан қандай?","70"],["(−3)·(−4) = ?","12"]];
+const FQ=[["Екі санның қосындысы 10, көбейтіндісі 21. Осы сандарды тап.","3 және 7"],
+["Екі санның қосындысы 0, көбейтіндісі −25. Осы сандарды тап.","5 және −5"],
+["x²−6x+c=0 теңдеуінің бір түбірі 1-ге тең. c неге тең?","c = 5 (екінші түбір 5, көбейтінді 5)"],
+["Екі санның қосындысы 9, көбейтіндісі 20. Үлкен санның кішіден айырмасы неге тең?","1 (сандар 5 және 4)"],
+["x²−10x+25=0 теңдеуінің неше түбірі бар?","Түбірі біреу: x₁=x₂=5 (қосындысы 10, көбейтіндісі 25)"],
+["x²+px+q=0 теңдеуінің түбірлері бір-біріне қарама-қарсы сандар болса, p неге тең?","p = 0 (қосындысы 0)"]];
+// 30 есеп (PDF бойынша)
+const S1=["x²−14x+33=0","x²+17x−60=0","3x²−11x+6=0","5x²+9x−4=0","2x²−7x−15=0","7x²+x−3=0","x²+25x+84=0","6x²−x−12=0"],A1=["14; 33","−17; −60","11/3; 2","−9/5; −4/5","7/2; −15/2","−1/7; −3/7","−25; 84","1/6; −2"];
+const S2=["x²−10x+24=0","x²+11x+28=0","x²−2x−35=0","x²+5x−24=0","x²−17x+72=0","x²+14x+45=0","x²−x−42=0","x²+2x−48=0"],A2=["4; 6","−4; −7","7; −5","3; −8","8; 9","−5; −9","7; −6","6; −8"];
+const S3=["3 және 8","−1 және 6","−4 және −6","10 және −2","0 және −7","1/2 және 4 (бүтін коэффициентті)","4+√5 және 4−√5","−2+√3 және −2−√3"],A3=["x²−11x+24=0","x²−5x−6=0","x²+10x+24=0","x²−8x−20=0","x²+7x=0","2x²−9x+4=0","x²−8x+11=0","x²+4x+1=0"];
+const S4=["x+y=11, xy=24","x+y=−7, xy=12","x+y=2, xy=−15","a+b=−1, ab=−20"],A4=["(3;8), (8;3)","(−3;−4), (−4;−3)","(5;−3), (−3;5)","(4;−5), (−5;4)"];
+const S5=["8x²−5x−3=0","9x²−4x−5=0"],A5=["1; −3/8","1; −5/9"];
+const SECS=[
+ S1.map((e,i)=>({n:i+1,s:"Қосынды мен көбейтінді",q:"Түбірлердің қосындысы мен көбейтіндісін табыңдар: "+e,a:"Қосындысы; көбейтіндісі: "+A1[i]})),
+ S2.map((e,i)=>({n:i+9,s:"Кері теорема",q:"Виет теоремасына кері теорема бойынша шешіңдер: "+e,a:"Түбірлері: "+A2[i]})),
+ S3.map((e,i)=>({n:i+17,s:"Теңдеу құру",q:"Түбірлері "+e+" болатын квадрат теңдеу құрыңдар.",a:A3[i]})),
+ S4.map((e,i)=>({n:i+25,s:"Теңдеулер жүйесі",q:"Теңдеулер жүйесін шешіңдер: "+e+".",a:"Шешімі: "+A4[i]})),
+ S5.map((e,i)=>({n:i+29,s:"3-теорема (a+b+c=0)",q:"3-теорема бойынша (a+b+c=0) түбірлерін табыңдар: "+e,a:"Түбірлері: "+A5[i]}))];
+const mk={T:()=>shuf(TQ.slice()),B:()=>shuf(BQ.slice()),F:()=>shuf(FQ.slice()),
+ P:()=>{const g=SECS.map(s=>shuf(s.slice())),o=[];while(g.some(a=>a.length))g.forEach(a=>a.length&&o.push(a.pop()));return o}};
+let dk={},pos=0,score=0,done=0,busy=false,rc=0,cells=[];
+const next=t=>{if(!dk[t]||!dk[t].length)dk[t]=mk[t]();return dk[t].shift()};
+// тақта
+const bd=$('bd'),pw=$('pw');
+const path=[];for(let c=0;c<7;c++)path.push([0,c]);for(let r=1;r<7;r++)path.push([r,6]);for(let c=5;c>=0;c--)path.push([6,c]);for(let r=5;r>=1;r--)path.push([r,0]);
+path.forEach(([r,c],i)=>{const t=LAY[i],d=document.createElement('div');d.className='cell '+t;d.style.gridArea=(r+1)+'/'+(c+1);
+ d.innerHTML='<i>'+(i?INF[t][1]:'🏁')+'</i>'+INF[t][3];bd.appendChild(d);cells.push(d)});
+function place(){const c=cells[pos],w=c.offsetWidth*.62;pw.style.width=pw.style.height=w+'px';pw.style.left=(c.offsetLeft+(c.offsetWidth-w)/2)+'px';pw.style.top=(c.offsetTop+(c.offsetHeight-w)/2+3)+'px'}
+addEventListener('resize',place);place();
+const upd=()=>{$('sc').textContent=score;$('dn').textContent=done};
+// кубик
+const FX={1:[0,0],2:[0,-90],3:[90,0],4:[-90,0],5:[0,90],6:[0,180]};
+function roll(){if(busy)return;busy=true;$('rb').disabled=true;const n=1+Math.floor(Math.random()*6);rc++;const[x,y]=FX[n];
+ $('cube').style.transform='rotateX('+(x+720*rc)+'deg) rotateY('+(y+720*rc)+'deg)';setTimeout(()=>move(n),1100)}
+function move(n){let i=0;const st=()=>{pos=(pos+1)%24;place();if(++i<n)setTimeout(st,380);else setTimeout(land,500)};setTimeout(st,100)}
+// тапсырма
+function show(h){$('cd').innerHTML=h;$('m').style.display='flex'}
+function close_(){$('m').style.display='none';done++;upd();busy=false;$('rb').disabled=false}
+function land(){const t=LAY[pos],I=INF[t],q=next(t);
+ const head='<span class="tag" style="background:'+I[2]+'">'+I[1]+' '+I[0]+'</span>';
+ if(t==='T'){show(head+'<div class="q">'+q[0]+'</div>'+q[1].map((o,i)=>'<button class="o" data-i="'+i+'">'+o+'</button>').join('')+'<div id="fb"></div>');
+  document.querySelectorAll('.o').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;document.querySelectorAll('.o').forEach(x=>x.disabled=true);
+   const ob=document.querySelectorAll('.o');ob[q[2]].classList.add('ok');
+   if(i===q[2]){score++;upd();$('fb').innerHTML='<div class="ans">Дұрыс! +1 ортақ ұпай 🎉</div>'}else{b.classList.add('no');$('fb').innerHTML='<div class="ans">Дұрыс жауап жасылмен белгіленді.</div>'}
+   $('fb').innerHTML+='<div class="row"><button id="nx">Келесі ход ➜</button></div>';$('nx').onclick=()=>{$('m').style.display='none';close_()}})}
+ else{let body,btn='Келесі ход ➜',pre='';
+  if(t==='P'){pre='<div style="font-weight:800;color:var(--bl)">Есеп №'+q.n+' · '+q.s+'</div>';body=q.q}
+  else if(t==='B'){score++;upd();pre='<div class="ans" style="border-color:var(--ye)">+1 ортақ ұпай! ⭐</div>';body=q[0];btn='🎲 Кубикті қайта лақтыру'}
+  else body=q[0];
+  const ans=t==='P'?q.a:q[1];
+  show(head+pre+'<div class="q">'+body+'</div><div id="fb"></div><div class="row"><button class="ghost" id="sh">Жауабын көрсету</button></div>');
+  $('sh').onclick=()=>{$('fb').innerHTML='<div class="ans">Жауабы: '+ans+'</div>';$('sh').parentNode.innerHTML='<button id="nx">'+btn+'</button>';$('nx').onclick=()=>{$('m').style.display='none';close_()}}}}
+$('rb').onclick=roll;
+$('rs').onclick=()=>{if(busy||!confirm('Ойынды қайта бастау керек пе?'))return;pos=0;score=0;done=0;dk={};upd();place()};
+</script></body></html>
